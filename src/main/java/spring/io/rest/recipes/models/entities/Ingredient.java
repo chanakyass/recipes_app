@@ -14,7 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Ingredient {
     @Id
-    @SequenceGenerator(name = "ingredient_sequence", sequenceName = "ingredient_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "ingredient_sequence", sequenceName = "ingredient_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ingredient_sequence")
     private Long id;
     private String name;

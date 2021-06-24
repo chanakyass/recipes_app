@@ -20,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class User {
     @Id
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
     private String firstName;

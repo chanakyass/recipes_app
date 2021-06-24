@@ -11,6 +11,6 @@ import spring.io.rest.recipes.enums.UnitOfMeasurement;
 public class RecipeIngredientDto {
     private Long id;
     private IngredientDto ingredient;
-    private Integer quantity;
+    private Double quantity;
     private UnitOfMeasurement uom;
 }

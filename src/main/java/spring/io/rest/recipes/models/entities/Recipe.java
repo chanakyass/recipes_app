@@ -21,7 +21,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Recipe {
     @Id
-    @SequenceGenerator(name = "recipe_sequence", sequenceName = "recipe_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "recipe_sequence", sequenceName = "recipe_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_sequence")
     private Long id;
     private String name;
@@ -30,7 +30,7 @@ public class Recipe {
     @Enumerated(value = EnumType.ORDINAL)
     private ItemType itemType;
     private Integer serving;
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<RecipeIngredient> recipeIngredients;
     @ManyToOne

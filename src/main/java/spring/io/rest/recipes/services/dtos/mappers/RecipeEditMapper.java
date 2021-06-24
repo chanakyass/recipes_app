@@ -7,7 +7,6 @@ import spring.io.rest.recipes.models.entities.RecipeIngredient;
 import spring.io.rest.recipes.services.dtos.RecipeDto;
 import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
@@ -26,63 +25,17 @@ public abstract class RecipeEditMapper {
     protected void afterUpdateRecipe(RecipeDto request, @MappingTarget Recipe recipe){
         List<RecipeIngredient> recipeIngredientList = recipe.getRecipeIngredients();
         List<RecipeIngredientDto> updatedRecipeIngredientList = request.getRecipeIngredients();
-        List<RecipeIngredient> removedIngredients = new ArrayList<>();
+        int lengthOfList = recipeIngredientList.size();
 
-        recipeIngredientList.sort((obj1, obj2) -> {
-            if(obj1.getId() < obj2.getId())
-                return -1;
-            else if(obj1.getId().equals(obj2.getId()))
-                return 0;
-            return 1;
-        });
-
-        updatedRecipeIngredientList.sort((obj1, obj2) -> {
-            if(obj1.getId() < obj2.getId())
-                return -1;
-            else if(obj1.getId().equals(obj2.getId()))
-                return 0;
-            return 1;
-        });
-
-        int lengthOfIngredients = recipeIngredientList.size();
-        int lengthOfUpdatedIngredients = updatedRecipeIngredientList.size();
-
-        if(lengthOfIngredients > lengthOfUpdatedIngredients) {
-            for(int i=0, j=0; i<lengthOfIngredients;){
-                RecipeIngredient ingredientBeforeUpdate = recipeIngredientList.get(i);
-                RecipeIngredientDto ingredientAfterUpdate = updatedRecipeIngredientList.get(j);
-                if(ingredientBeforeUpdate.getId().equals(ingredientAfterUpdate.getId())){
-                    recipeIngredientMapper.updateRecipeIngredient(ingredientAfterUpdate, ingredientBeforeUpdate);
-                    i++;
-                    j++;
-                }
-                else{
-                    removedIngredients.add(ingredientBeforeUpdate);
-                    i++;
-                }
+        for(int i=0; i<lengthOfList; i++){
+            RecipeIngredient ingredientBeforeUpdate = recipeIngredientList.get(i);
+            RecipeIngredientDto ingredientAfterUpdate = updatedRecipeIngredientList.get(i);
+            if(ingredientBeforeUpdate.getRecipe() != null){
+                ingredientBeforeUpdate.setRecipe(recipe);
             }
-            recipeIngredientList.removeAll(removedIngredients);
+            recipeIngredientMapper.updateRecipeIngredient(ingredientAfterUpdate, ingredientBeforeUpdate);
         }
-        else if(lengthOfIngredients < lengthOfUpdatedIngredients){
-            int i = 0;
-            for(; i<lengthOfIngredients;i++){
-                RecipeIngredient ingredientBeforeUpdate = recipeIngredientList.get(i);
-                RecipeIngredientDto ingredientAfterUpdate = updatedRecipeIngredientList.get(i);
-                recipeIngredientMapper.updateRecipeIngredient(ingredientAfterUpdate, ingredientBeforeUpdate);
-            }
 
-            for(;i<lengthOfUpdatedIngredients; i++){
-                RecipeIngredientDto ingredientAfterUpdate = updatedRecipeIngredientList.get(i);
-                recipeIngredientList.add(recipeIngredientMapper.toRecipeIngredient(ingredientAfterUpdate));
-            }
-        }
-        else{
-            for(int i=0; i<lengthOfIngredients; i++){
-                RecipeIngredient ingredientBeforeUpdate = recipeIngredientList.get(i);
-                RecipeIngredientDto ingredientAfterUpdate = updatedRecipeIngredientList.get(i);
-                recipeIngredientMapper.updateRecipeIngredient(ingredientAfterUpdate, ingredientBeforeUpdate);
-            }
-        }
     }
 
     public RecipeIngredientMapper getRecipeIngredientMapper() {

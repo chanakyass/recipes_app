@@ -15,7 +15,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class RecipeIngredient {
     @Id
-    @SequenceGenerator(name = "recipe_ingredient_sequence", sequenceName = "recipe_ingredient_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "recipe_ingredient_sequence", sequenceName = "recipe_ingredient_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_ingredient_sequence")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "recipe_id", foreignKey = @ForeignKey(name = "fk_recipe_id"), nullable = false)
@@ -24,7 +25,7 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id", foreignKey = @ForeignKey(name = "fk_ingredient_id"),
             nullable = false)
     private Ingredient ingredient;
-    private Integer quantity;
+    private Double quantity;
     @Enumerated(value = EnumType.ORDINAL)
     private UnitOfMeasurement uom;
 
