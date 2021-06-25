@@ -41,11 +41,12 @@ public class RecipeCRUDServices {
     }
 
     @Transactional
-    public void addRecipe(RecipeDto recipeDto) {
+    public Long addRecipe(RecipeDto recipeDto) {
         Optional.ofNullable(recipeDto).orElseThrow(()-> new IllegalStateException("Wrong format"));
         addUnavailableIngredients(recipeDto);
         Recipe recipe = recipeMapper.toRecipe(recipeDto);
-        recipeRepository.save(recipe);
+        Recipe newRecipe = recipeRepository.save(recipe);
+        return newRecipe.getId();
     }
 
     @Transactional
@@ -98,11 +99,19 @@ public class RecipeCRUDServices {
         }
     }
 
+    public RecipeDto getRecipeWithId(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalStateException("Recipe is not present"));
+        return recipeMapper.toRecipeDto(recipe);
+    }
+
     public List<RecipeDto> getAllRecipes(){
         List<Recipe> recipesList =  recipeRepository.findAll();
         return recipeMapper.toRecipeDtoList(recipesList);
     }
 
-
+    public void deleteRecipe(Long recipeId) {
+        recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalStateException("Recipe is not present"));
+        recipeRepository.deleteById(recipeId);
+    }
 
 }

@@ -22,8 +22,8 @@ public class RecipesController {
 
     @PostMapping("recipe")
     public ResponseEntity<ApiMessageResponse> addRecipe(@RequestBody RecipeDto recipeDto){
-        recipeCRUDServices.addRecipe(recipeDto);
-        return ResponseEntity.ok(ApiMessageResponse.defaultSuccessResponse());
+        Long generatedId = recipeCRUDServices.addRecipe(recipeDto);
+        return ResponseEntity.ok(ApiMessageResponse.defaultCreationSuccessResponse(generatedId));
     }
 
     @PutMapping("recipe")
@@ -32,8 +32,21 @@ public class RecipesController {
         return ResponseEntity.ok(ApiMessageResponse.defaultSuccessResponse());
     }
 
+    @DeleteMapping("recipe/{recipeId}")
+    public ResponseEntity<ApiMessageResponse> deleteRecipe(@PathVariable("recipeId") Long recipeId){
+        recipeCRUDServices.deleteRecipe(recipeId);
+        return ResponseEntity.ok(ApiMessageResponse.defaultSuccessResponse());
+    }
+
     @GetMapping("recipes")
     public List<RecipeDto> getRecipes(){
         return recipeCRUDServices.getAllRecipes();
     }
+
+    @GetMapping("recipe/{recipeId}")
+    public RecipeDto getRecipe(@PathVariable("recipeId") Long recipeId){
+        return recipeCRUDServices.getRecipeWithId(recipeId);
+
+    }
+
 }
