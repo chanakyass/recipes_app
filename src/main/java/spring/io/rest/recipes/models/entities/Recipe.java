@@ -19,6 +19,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "recipes")
 public class Recipe {
     @Id
     @SequenceGenerator(name = "recipe_sequence", sequenceName = "recipe_sequence")
@@ -34,7 +35,7 @@ public class Recipe {
     @ToString.Exclude
     private List<RecipeIngredient> recipeIngredients;
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_user_id"), nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_recipe_user_id"), nullable = false)
     private User user;
 
     @Override

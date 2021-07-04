@@ -12,6 +12,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "ingredients")
 public class Ingredient {
     @Id
     @SequenceGenerator(name = "ingredient_sequence", sequenceName = "ingredient_sequence")

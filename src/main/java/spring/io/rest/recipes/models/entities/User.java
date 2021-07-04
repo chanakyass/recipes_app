@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,19 +19,24 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String username;
+    @Embedded
+    private FullName fullName;
+    private String profileName;
     private String email;
     private String password;
     private LocalDate dob;
     private String userSummary;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE},
+        fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private List<Role> grantedAuthoritiesList;
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -55,6 +61,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getEmail(), getPassword(), getUsername());
+        return Objects.hash(getId(), getFullName(), getEmail(), getPassword(), getProfileName());
     }
 }

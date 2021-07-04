@@ -1,13 +1,11 @@
 package spring.io.rest.recipes;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class RecipesApplicationTests {
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest
+//class RecipesApplicationTests {
+//
+//    @Test
+//    void contextLoads() {
+//    }
+//
+//}

@@ -3,14 +3,16 @@ package spring.io.rest.recipes.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.io.rest.recipes.models.ApiMessageResponse;
 import spring.io.rest.recipes.services.RecipeCRUDServices;
 import spring.io.rest.recipes.services.dtos.RecipeDto;
+import spring.io.rest.recipes.services.responses.ApiMessageResponse;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
 @RequestMapping("${app.uri.prefix}")
+@RolesAllowed("ROLE_USER")
 public class RecipesController {
 
     private final RecipeCRUDServices recipeCRUDServices;
@@ -39,13 +41,14 @@ public class RecipesController {
     }
 
     @GetMapping("recipes")
-    public List<RecipeDto> getRecipes(){
-        return recipeCRUDServices.getAllRecipes();
+    public ResponseEntity<List<RecipeDto>> getRecipes(){
+        List<RecipeDto> recipeDtoList = recipeCRUDServices.getAllRecipes();
+        return ResponseEntity.ok().body(recipeDtoList);
     }
 
     @GetMapping("recipe/{recipeId}")
-    public RecipeDto getRecipe(@PathVariable("recipeId") Long recipeId){
-        return recipeCRUDServices.getRecipeWithId(recipeId);
+    public ResponseEntity<RecipeDto> getRecipe(@PathVariable("recipeId") Long recipeId){
+        return ResponseEntity.ok().body(recipeCRUDServices.getRecipeWithId(recipeId));
 
     }
 

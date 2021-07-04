@@ -1,12 +1,13 @@
 package spring.io.rest.recipes.services.dtos.mappers;
 
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.services.dtos.RecipeDto;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class, RecipeIngredientMapper.class})
 public abstract class RecipeMapper {
 
     public abstract Recipe toRecipe(RecipeDto recipeDto);

@@ -2,48 +2,38 @@ package spring.io.rest.recipes.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import spring.io.rest.recipes.models.entities.Ingredient;
+import spring.io.rest.recipes.exceptions.ApiOperationException;
 import spring.io.rest.recipes.models.entities.Recipe;
-import spring.io.rest.recipes.models.entities.RecipeIngredient;
-import spring.io.rest.recipes.repositories.IngredientRepository;
 import spring.io.rest.recipes.repositories.RecipeRepository;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
 import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
-import spring.io.rest.recipes.services.dtos.mappers.IngredientMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeEditMapper;
-import spring.io.rest.recipes.services.dtos.mappers.RecipeIngredientMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeMapper;
+import spring.io.rest.recipes.services.util.RecipeServiceUtil;
 
 import javax.transaction.Transactional;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeCRUDServices {
     private final RecipeRepository recipeRepository;
-    private final IngredientRepository ingredientRepository;
     private final RecipeMapper recipeMapper;
     private final RecipeEditMapper recipeEditMapper;
-    private final IngredientMapper ingredientMapper;
-    private final RecipeIngredientMapper recipeIngredientMapper;
+    private final RecipeServiceUtil recipeServiceUtil;
 
     @Autowired
-    public RecipeCRUDServices(RecipeRepository recipeRepository, IngredientRepository ingredientRepository,
-                              RecipeMapper recipeMapper, RecipeEditMapper recipeEditMapper,
-                              IngredientMapper ingredientMapper, RecipeIngredientMapper recipeIngredientMapper) {
+    public RecipeCRUDServices(RecipeRepository recipeRepository, RecipeMapper recipeMapper, RecipeEditMapper recipeEditMapper,
+                              RecipeServiceUtil recipeServiceUtil) {
         this.recipeRepository = recipeRepository;
-        this.ingredientRepository = ingredientRepository;
         this.recipeMapper = recipeMapper;
         this.recipeEditMapper = recipeEditMapper;
-        this.ingredientMapper = ingredientMapper;
-        this.recipeIngredientMapper = recipeIngredientMapper;
+        this.recipeServiceUtil = recipeServiceUtil;
     }
 
     @Transactional
     public Long addRecipe(RecipeDto recipeDto) {
-        Optional.ofNullable(recipeDto).orElseThrow(()-> new IllegalStateException("Wrong format"));
-        addUnavailableIngredients(recipeDto);
+        Optional.ofNullable(recipeDto).orElseThrow(()-> new ApiOperationException("Wrong format"));
+        recipeServiceUtil.saveUnavailableIngredients(recipeDto);
         Recipe recipe = recipeMapper.toRecipe(recipeDto);
         Recipe newRecipe = recipeRepository.save(recipe);
         return newRecipe.getId();
@@ -51,56 +41,14 @@ public class RecipeCRUDServices {
 
     @Transactional
     public void modifyRecipe(RecipeDto recipeDto) {
-        Recipe recipe = recipeRepository.findById(recipeDto.getId()).orElseThrow(() -> new IllegalStateException("No such recipe"));
-        addUnavailableIngredients(recipeDto);
-        addOrRemoveIngredientsFromList(recipeDto, recipe);
+        Recipe recipe = recipeRepository.findById(recipeDto.getId()).orElseThrow(() -> new ApiOperationException("Recipe is not present"));
+        recipeServiceUtil.saveUnavailableIngredients(recipeDto);
+        recipeServiceUtil.addOrRemoveRecipeIngredients(recipeDto, recipe);
         recipeEditMapper.updateRecipe(recipeDto, recipe);
     }
 
-    @Transactional
-    public void addOrRemoveIngredientsFromList(RecipeDto recipeDto, Recipe recipe) {
-        List<RecipeIngredient> recipeIngredientList = recipe.getRecipeIngredients();
-        List<RecipeIngredientDto> updatedRecipeIngredientList = recipeDto.getRecipeIngredients();
-
-        List<RecipeIngredient> extraIngredients = updatedRecipeIngredientList.stream()
-                .filter(recipeIngredientDto -> recipeIngredientDto.getId() == null)
-                .map(recipeIngredientDto -> {
-                    RecipeIngredient recipeIngredient = recipeIngredientMapper.toRecipeIngredient(recipeIngredientDto);
-                    recipeIngredient.setRecipe(recipe);
-                    return recipeIngredient;
-                }).collect(Collectors.toList());
-
-        Set<Long> updatedIngredientsSet = updatedRecipeIngredientList.stream()
-                .map(RecipeIngredientDto::getId)
-                .filter(Objects::nonNull).collect(Collectors.toSet());
-
-        List<RecipeIngredient> removedIngredients = recipeIngredientList.stream()
-                .filter(recipeIngredient -> !updatedIngredientsSet.contains(recipeIngredient.getId()))
-                .collect(Collectors.toList());
-
-        recipeIngredientList.removeAll(removedIngredients);
-        recipeIngredientList.addAll(extraIngredients);
-    }
-
-    @Transactional
-    public void addUnavailableIngredients(RecipeDto recipeDto) {
-        List<Ingredient> unavailableIngredients = new ArrayList<>();
-        List<IngredientDto> ingredientDtoList = new ArrayList<>();
-        for(RecipeIngredientDto recipeIngredientDto: recipeDto.getRecipeIngredients()) {
-            if(recipeIngredientDto.getIngredient().getId() == null || ingredientRepository.findById(recipeIngredientDto.getIngredient().getId()).isEmpty()){
-                unavailableIngredients.add(ingredientMapper.toIngredient(recipeIngredientDto.getIngredient()));
-                ingredientDtoList.add(recipeIngredientDto.getIngredient());
-            }
-        }
-
-        ingredientRepository.saveAll(unavailableIngredients);
-        for(int i=0; i<unavailableIngredients.size(); i++) {
-            ingredientDtoList.get(i).setId(unavailableIngredients.get(i).getId());
-        }
-    }
-
     public RecipeDto getRecipeWithId(Long recipeId) {
-        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalStateException("Recipe is not present"));
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new ApiOperationException("Recipe is not present"));
         return recipeMapper.toRecipeDto(recipe);
     }
 
@@ -110,7 +58,7 @@ public class RecipeCRUDServices {
     }
 
     public void deleteRecipe(Long recipeId) {
-        recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalStateException("Recipe is not present"));
+        recipeRepository.findById(recipeId).orElseThrow(() -> new ApiOperationException("Recipe is not present"));
         recipeRepository.deleteById(recipeId);
     }
 
