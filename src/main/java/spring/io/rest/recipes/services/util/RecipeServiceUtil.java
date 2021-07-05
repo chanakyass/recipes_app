@@ -6,9 +6,10 @@ import spring.io.rest.recipes.models.entities.Ingredient;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.models.entities.RecipeIngredient;
 import spring.io.rest.recipes.repositories.IngredientRepository;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
+import spring.io.rest.recipes.repositories.RecipeIngredientRepository;
+import spring.io.rest.recipes.services.dtos.entities.IngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeIngredientDto;
 import spring.io.rest.recipes.services.dtos.mappers.IngredientMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeIngredientMapper;
 
@@ -22,14 +23,16 @@ import java.util.stream.IntStream;
 @Service
 public class RecipeServiceUtil {
     private final IngredientRepository ingredientRepository;
+    private final RecipeIngredientRepository recipeIngredientRepository;
     private final IngredientMapper ingredientMapper;
     private final RecipeIngredientMapper recipeIngredientMapper;
 
     @Autowired
-    public RecipeServiceUtil(IngredientRepository ingredientRepository, IngredientMapper ingredientMapper, RecipeIngredientMapper recipeIngredientMapper) {
+    public RecipeServiceUtil(IngredientRepository ingredientRepository, IngredientMapper ingredientMapper, RecipeIngredientMapper recipeIngredientMapper, RecipeIngredientRepository recipeIngredientRepository) {
         this.ingredientRepository = ingredientRepository;
         this.ingredientMapper = ingredientMapper;
         this.recipeIngredientMapper = recipeIngredientMapper;
+        this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
     public void saveUnavailableIngredients(RecipeDto recipeDto) {
@@ -71,6 +74,9 @@ public class RecipeServiceUtil {
         List<RecipeIngredient> removedIngredients = recipeIngredientList.stream()
                 .filter(recipeIngredient -> !updatedIngredientsSet.contains(recipeIngredient.getId()))
                 .collect(Collectors.toList());
+
+        recipeIngredientRepository.deleteAllInBatch(removedIngredients);
+        recipeIngredientRepository.saveAll(extraIngredients);
 
         recipeIngredientList.removeAll(removedIngredients);
         recipeIngredientList.addAll(extraIngredients);

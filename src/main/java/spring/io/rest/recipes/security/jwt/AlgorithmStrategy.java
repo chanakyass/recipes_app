@@ -1,7 +1,6 @@
 package spring.io.rest.recipes.security.jwt;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -10,11 +9,6 @@ import spring.io.rest.recipes.enums.Strategy;
 import spring.io.rest.recipes.exceptions.ApiAccessException;
 
 import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 
 @Component
 @EnableConfigurationProperties(SecurityProperties.class)

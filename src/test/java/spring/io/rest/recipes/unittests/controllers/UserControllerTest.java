@@ -10,10 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import spring.io.rest.recipes.controllers.UserController;
 import spring.io.rest.recipes.services.UserService;
-import spring.io.rest.recipes.services.dtos.UserDto;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
-import spring.io.rest.recipes.services.dtos.UserUpdateDto;
-import spring.io.rest.recipes.services.responses.ApiMessageResponse;
+import spring.io.rest.recipes.services.dtos.entities.UserDto;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserUpdateDto;
+import spring.io.rest.recipes.services.dtos.entities.responses.ApiMessageResponse;
 import spring.io.rest.recipes.unittests.data.AbstractTestDataFactory;
 import spring.io.rest.recipes.unittests.data.UserTestDataFactory;
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import spring.io.rest.recipes.exceptions.ApiOperationException;
 import spring.io.rest.recipes.models.entities.Ingredient;
 import spring.io.rest.recipes.repositories.IngredientRepository;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.IngredientDto;
 import spring.io.rest.recipes.services.dtos.mappers.IngredientMapper;
 
 import java.util.List;

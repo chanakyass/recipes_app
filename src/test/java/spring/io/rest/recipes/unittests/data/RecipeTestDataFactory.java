@@ -4,8 +4,8 @@ import spring.io.rest.recipes.enums.ItemType;
 import spring.io.rest.recipes.enums.UnitOfMeasurement;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.models.entities.RecipeIngredient;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeIngredientDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

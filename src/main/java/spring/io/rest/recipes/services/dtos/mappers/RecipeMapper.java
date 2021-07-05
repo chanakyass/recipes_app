@@ -1,9 +1,8 @@
 package spring.io.rest.recipes.services.dtos.mappers;
 
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import spring.io.rest.recipes.models.entities.Recipe;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
 
 import java.util.List;
 

@@ -89,11 +89,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             exceptionHandler.resolveException(request, response, null, accessException);
         }
     }
-
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//
-//        return (request.getRequestURI().contains("public"));
-//
-//    }
 }

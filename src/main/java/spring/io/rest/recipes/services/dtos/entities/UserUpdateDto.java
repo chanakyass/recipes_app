@@ -1,4 +1,4 @@
-package spring.io.rest.recipes.services.dtos;
+package spring.io.rest.recipes.services.dtos.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,23 +11,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserDto {
+public class UserUpdateDto {
     private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
     private String profileName;
-    private String userSummary;
-    private LocalDate dob;
     private String email;
-    private String password;
-    private List<RoleDto> grantedAuthoritiesList;
+    private LocalDate dob;
+    private String userSummary;
 
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.io.rest.recipes.services.UserService;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
-import spring.io.rest.recipes.services.dtos.UserUpdateDto;
-import spring.io.rest.recipes.services.responses.ApiMessageResponse;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserUpdateDto;
+import spring.io.rest.recipes.services.dtos.entities.responses.ApiMessageResponse;
 
 import javax.annotation.security.RolesAllowed;
 

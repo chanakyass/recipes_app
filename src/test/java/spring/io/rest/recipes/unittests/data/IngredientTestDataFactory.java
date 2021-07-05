@@ -1,7 +1,7 @@
 package spring.io.rest.recipes.unittests.data;
 
 import spring.io.rest.recipes.models.entities.Ingredient;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.IngredientDto;
 
 import java.util.ArrayList;
 import java.util.List;

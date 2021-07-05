@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import spring.io.rest.recipes.services.responses.ApiCallError;
+import spring.io.rest.recipes.services.dtos.entities.responses.ApiCallError;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -56,17 +56,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiCallError> handleAccessDeniedException(HttpServletRequest request, AccessDeniedException ex){
         logger.error("handleAccessDeniedException {}\n", request.getRequestURI(), ex);
-        if (request.isUserInRole("ROLE_USER")) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(new ApiCallError(HttpStatus.FORBIDDEN.value(), request.getRequestURI(),
-                            HttpStatus.FORBIDDEN.getReasonPhrase(), LocalDateTime.now(), List.of(ex.getMessage())));
-        } else if (request.isUserInRole("ROLE_ADMIN")) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(new ApiCallError(HttpStatus.FORBIDDEN.value(), request.getRequestURI(),
-                            HttpStatus.FORBIDDEN.getReasonPhrase(), LocalDateTime.now(), List.of(ex.getMessage() )));
-        }
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ApiCallError(HttpStatus.FORBIDDEN.value(), request.getRequestURI(),
                         HttpStatus.FORBIDDEN.getReasonPhrase(), LocalDateTime.now(), List.of(ex.getMessage())));

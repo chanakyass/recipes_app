@@ -15,8 +15,8 @@ import spring.io.rest.recipes.security.AuthRequest;
 import spring.io.rest.recipes.security.AuthResponse;
 import spring.io.rest.recipes.services.CustomUserDetailsService;
 import spring.io.rest.recipes.services.UserService;
-import spring.io.rest.recipes.services.dtos.UserDto;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserDto;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
 import spring.io.rest.recipes.unittests.data.AbstractTestDataFactory;
 import spring.io.rest.recipes.unittests.data.UserTestDataFactory;
 

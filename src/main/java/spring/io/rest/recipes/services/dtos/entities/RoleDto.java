@@ -1,4 +1,4 @@
-package spring.io.rest.recipes.services.dtos;
+package spring.io.rest.recipes.services.dtos.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

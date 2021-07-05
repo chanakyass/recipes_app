@@ -12,7 +12,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ingredients")
+@Table(name = "ingredients", uniqueConstraints = {@UniqueConstraint(name = "uq_name", columnNames = {"name"})})
 public class Ingredient {
     @Id
     @SequenceGenerator(name = "ingredient_sequence", sequenceName = "ingredient_sequence")

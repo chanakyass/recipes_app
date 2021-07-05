@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import spring.io.rest.recipes.models.entities.User;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
 
 @Data
 @AllArgsConstructor

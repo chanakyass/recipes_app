@@ -1,11 +1,12 @@
 package spring.io.rest.recipes.services.dtos.mappers;
 
-import lombok.NoArgsConstructor;
-import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.models.entities.RecipeIngredient;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeIngredientDto;
 
 import java.util.List;
 import java.util.stream.IntStream;

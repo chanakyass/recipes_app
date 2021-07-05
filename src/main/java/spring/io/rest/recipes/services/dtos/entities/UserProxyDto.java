@@ -1,4 +1,4 @@
-package spring.io.rest.recipes.services.dtos;
+package spring.io.rest.recipes.services.dtos.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

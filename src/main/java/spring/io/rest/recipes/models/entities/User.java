@@ -19,7 +19,8 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "uq_email", columnNames = {"email"}),
+                                            @UniqueConstraint(name = "uq_profileName", columnNames = "profile_name")})
 public class User {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence")
@@ -27,6 +28,7 @@ public class User {
     private Long id;
     @Embedded
     private FullName fullName;
+    @Column(name = "profile_name")
     private String profileName;
     private String email;
     private String password;

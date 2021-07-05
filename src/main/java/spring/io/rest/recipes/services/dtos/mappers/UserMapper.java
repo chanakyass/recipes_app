@@ -1,14 +1,13 @@
 package spring.io.rest.recipes.services.dtos.mappers;
 
-import lombok.NoArgsConstructor;
 import org.mapstruct.*;
 import spring.io.rest.recipes.models.entities.FullName;
 import spring.io.rest.recipes.models.entities.Role;
 import spring.io.rest.recipes.models.entities.User;
-import spring.io.rest.recipes.services.dtos.RoleDto;
-import spring.io.rest.recipes.services.dtos.UserDto;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
-import spring.io.rest.recipes.services.dtos.UserUpdateDto;
+import spring.io.rest.recipes.services.dtos.entities.RoleDto;
+import spring.io.rest.recipes.services.dtos.entities.UserDto;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserUpdateDto;
 
 import java.util.List;
 

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import spring.io.rest.recipes.exceptions.ApiOperationException;
 import spring.io.rest.recipes.models.entities.User;
 import spring.io.rest.recipes.repositories.UserRepository;
-import spring.io.rest.recipes.services.dtos.UserDto;
-import spring.io.rest.recipes.services.dtos.UserProxyDto;
-import spring.io.rest.recipes.services.dtos.UserUpdateDto;
+import spring.io.rest.recipes.services.dtos.entities.UserDto;
+import spring.io.rest.recipes.services.dtos.entities.UserProxyDto;
+import spring.io.rest.recipes.services.dtos.entities.UserUpdateDto;
 import spring.io.rest.recipes.services.dtos.mappers.UserMapper;
 
 import javax.transaction.Transactional;

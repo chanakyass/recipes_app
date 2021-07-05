@@ -3,12 +3,7 @@ package spring.io.rest.recipes.services.dtos.mappers;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import spring.io.rest.recipes.models.entities.Recipe;
-import spring.io.rest.recipes.models.entities.RecipeIngredient;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
-
-import java.util.List;
-import java.util.stream.IntStream;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;

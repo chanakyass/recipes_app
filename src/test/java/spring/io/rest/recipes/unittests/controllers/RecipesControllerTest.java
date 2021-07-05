@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import spring.io.rest.recipes.controllers.RecipesController;
 import spring.io.rest.recipes.services.RecipeCRUDServices;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.responses.ApiMessageResponse;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.responses.ApiMessageResponse;
 import spring.io.rest.recipes.unittests.data.AbstractTestDataFactory;
 import spring.io.rest.recipes.unittests.data.RecipeTestDataFactory;
 

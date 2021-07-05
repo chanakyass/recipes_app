@@ -11,9 +11,10 @@ import spring.io.rest.recipes.enums.UnitOfMeasurement;
 import spring.io.rest.recipes.models.entities.Ingredient;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.repositories.IngredientRepository;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.dtos.RecipeIngredientDto;
+import spring.io.rest.recipes.repositories.RecipeIngredientRepository;
+import spring.io.rest.recipes.services.dtos.entities.IngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.RecipeIngredientDto;
 import spring.io.rest.recipes.services.dtos.mappers.IngredientMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeIngredientMapper;
 import spring.io.rest.recipes.services.util.RecipeServiceUtil;
@@ -21,6 +22,7 @@ import spring.io.rest.recipes.unittests.data.AbstractTestDataFactory;
 import spring.io.rest.recipes.unittests.data.IngredientTestDataFactory;
 import spring.io.rest.recipes.unittests.data.RecipeTestDataFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -41,6 +43,9 @@ class RecipeServiceUtilTest {
 
     @Mock
     RecipeIngredientMapper recipeIngredientMapper;
+
+    @Mock
+    private RecipeIngredientRepository recipeIngredientRepository;
 
     @InjectMocks
     private RecipeServiceUtil recipeServiceUtil;
@@ -120,6 +125,9 @@ class RecipeServiceUtilTest {
             RecipeIngredientDto dto = invocation.getArgument(0);
             return recipeTestDataFactory.getRecipeIngredient(dto.getId(), dto.getIngredient().getId(), null);
         });
+
+        when(recipeIngredientRepository.saveAll(anyList())).thenReturn(new ArrayList<>());
+        doNothing().when(recipeIngredientRepository).deleteAllInBatch(anyList());
 
         recipeServiceUtil.addOrRemoveRecipeIngredients(recipeDto, recipe);
 

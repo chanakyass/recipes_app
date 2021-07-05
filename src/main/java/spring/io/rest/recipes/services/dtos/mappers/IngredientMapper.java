@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
 import spring.io.rest.recipes.models.entities.Ingredient;
-import spring.io.rest.recipes.services.dtos.IngredientDto;
+import spring.io.rest.recipes.services.dtos.entities.IngredientDto;
 
 import java.util.List;
 

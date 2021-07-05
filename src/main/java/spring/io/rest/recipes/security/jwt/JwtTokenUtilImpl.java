@@ -2,6 +2,7 @@ package spring.io.rest.recipes.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
@@ -47,12 +48,12 @@ public class JwtTokenUtilImpl implements JwtTokenUtil {
         String token = "";
         try {
             token = JWT.create()
-                    .withSubject(+userPrincipal.getUserUniqueId()+":"
+                    .withSubject(userPrincipal.getUserUniqueId()+":"
                             +userPrincipal.getUsername()+":"
                             +userPrincipal.getProfileName())
                     .withIssuer(securityProperties.getIssuer())
                     .sign(algorithmStrategy.getAlgorithm(securityProperties.getStrategy()));
-        } catch (JWTCreationException exception) {
+        } catch (JWTCreationException | IllegalArgumentException exception) {
             //Invalid Signing configuration / Couldn't convert Claims.
             exception.printStackTrace();
             throw new ApiAccessException("Issue with generating token");
@@ -64,12 +65,14 @@ public class JwtTokenUtilImpl implements JwtTokenUtil {
 
     @Override
     public String getSubjectFromToken(String token) {
-
-        DecodedJWT decodedJWT = JWT.decode(token);
-
-        return decodedJWT.getSubject();
-
-
+        try {
+            DecodedJWT decodedJWT = JWT.decode(token);
+            return decodedJWT.getSubject();
+        }
+        catch (JWTDecodeException exception) {
+            exception.printStackTrace();
+            throw new ApiAccessException(exception.getLocalizedMessage());
+        }
     }
 
 

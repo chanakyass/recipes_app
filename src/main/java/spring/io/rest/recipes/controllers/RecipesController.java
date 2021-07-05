@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.io.rest.recipes.services.RecipeCRUDServices;
-import spring.io.rest.recipes.services.dtos.RecipeDto;
-import spring.io.rest.recipes.services.responses.ApiMessageResponse;
+import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
+import spring.io.rest.recipes.services.dtos.entities.responses.ApiMessageResponse;
 
 import javax.annotation.security.RolesAllowed;
 import java.util.List;

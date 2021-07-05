@@ -35,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String uriPrefix;
 
     @Autowired
-    public SecurityConfig(@Lazy CustomUserDetailsService appUserDetailsService, JwtTokenFilter jwtTokenFilter, @Value("${app.uri.prefix}") String uriPrefix){
+    public SecurityConfig(@Lazy CustomUserDetailsService appUserDetailsService, JwtTokenFilter jwtTokenFilter,
+                          @Value("${app.uri.prefix}") String uriPrefix){
         this.appUserDetailsService = appUserDetailsService;
         this.jwtTokenFilter = jwtTokenFilter;
         this.uriPrefix = uriPrefix;
@@ -63,6 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(uriPrefix+"/public/**").permitAll()
+                .antMatchers(uriPrefix+"/admin/**")
+                                        .access("hasIpAddress(\"127.0.0.1\") or hasIpAddress(\"::1\")")
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/configuration/security").permitAll()
                 .antMatchers("/swagger-resources/**", "/webjars/**", "/swagger-ui.html", "/swagger-ui.html/**").permitAll()
                 .anyRequest().authenticated()

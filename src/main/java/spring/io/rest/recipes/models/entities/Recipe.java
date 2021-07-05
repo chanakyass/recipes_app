@@ -31,7 +31,7 @@ public class Recipe {
     @Enumerated(value = EnumType.ORDINAL)
     private ItemType itemType;
     private Integer serving;
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<RecipeIngredient> recipeIngredients;
     @ManyToOne
