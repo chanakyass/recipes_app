@@ -21,10 +21,6 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_sequence")
     private Long id;
     private String authority;
-//    @ManyToOne
-//    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "role_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-//    private User user;
 
     @Override
     public boolean equals(Object o) {

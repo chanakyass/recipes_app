@@ -20,7 +20,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "uq_email", columnNames = {"email"}),
-                                            @UniqueConstraint(name = "uq_profileName", columnNames = "profile_name")})
+                                            @UniqueConstraint(name = "uq_profile_name", columnNames = "profile_name")})
 public class User {
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence")
@@ -34,10 +34,14 @@ public class User {
     private String password;
     private LocalDate dob;
     private String userSummary;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE},
-        fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE},
+        fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_user_role__user_id"))},
+            inverseJoinColumns = {@JoinColumn(name = "role_id",
+            foreignKey = @ForeignKey(name = "fk_user_role__role_id"))},
+            uniqueConstraints = {@UniqueConstraint(name = "unique_user_role", columnNames = {"user_id", "role_id"})})
+    @ToString.Exclude
     private List<Role> grantedAuthoritiesList;
 
     @JsonSerialize(using = LocalDateSerializer.class)

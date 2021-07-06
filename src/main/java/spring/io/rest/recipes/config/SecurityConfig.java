@@ -33,13 +33,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService appUserDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
     private final String uriPrefix;
+    private final String adminIp4Address;
+    private final String adminIp6Address;
 
     @Autowired
     public SecurityConfig(@Lazy CustomUserDetailsService appUserDetailsService, JwtTokenFilter jwtTokenFilter,
-                          @Value("${app.uri.prefix}") String uriPrefix){
+                          @Value("${app.uri.prefix}") String uriPrefix,
+                          @Value("${app.admin.ip4-address}") String adminIp4Address,
+                          @Value("${app.admin.ip6-address}") String adminIp6address){
         this.appUserDetailsService = appUserDetailsService;
         this.jwtTokenFilter = jwtTokenFilter;
         this.uriPrefix = uriPrefix;
+        this.adminIp4Address = adminIp4Address;
+        this.adminIp6Address = adminIp6address;
     }
 
 
@@ -65,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(uriPrefix+"/public/**").permitAll()
                 .antMatchers(uriPrefix+"/admin/**")
-                                        .access("hasIpAddress(\"127.0.0.1\") or hasIpAddress(\"::1\")")
+                                        .access("hasIpAddress('"+adminIp4Address+"') or hasIpAddress('"+adminIp6Address+"')")
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/configuration/security").permitAll()
                 .antMatchers("/swagger-resources/**", "/webjars/**", "/swagger-ui.html", "/swagger-ui.html/**").permitAll()
                 .anyRequest().authenticated()
