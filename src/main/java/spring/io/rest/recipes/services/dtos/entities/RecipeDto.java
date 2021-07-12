@@ -25,6 +25,8 @@ public class RecipeDto {
     private LocalDateTime createdOn;
     private ItemType itemType;
     private Integer serving;
+    private String recipeImageAddress;
+    private String cookingInstructions;
     private List<RecipeIngredientDto> recipeIngredients;
     private UserProxyDto user;
 

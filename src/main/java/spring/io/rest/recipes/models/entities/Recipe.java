@@ -31,6 +31,9 @@ public class Recipe {
     @Enumerated(value = EnumType.ORDINAL)
     private ItemType itemType;
     private Integer serving;
+    private String recipeImageAddress;
+    @Column(length = 65536)
+    private String cookingInstructions;
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<RecipeIngredient> recipeIngredients;

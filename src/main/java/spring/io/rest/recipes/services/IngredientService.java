@@ -37,4 +37,9 @@ public class IngredientService {
         Ingredient ingredient = ingredientRepository.findById(ingredientDto.getId()).orElseThrow(() -> new ApiOperationException("No such ingredient"));
         ingredientMapper.editIngredient(ingredientDto, ingredient);
     }
+
+    public List<IngredientDto> getAllIngredientsStartingWith(String ingredientName) {
+        List<Ingredient> ingredientList = ingredientRepository.findIngredientsStartingWith(ingredientName);
+        return ingredientMapper.toIngredientDtoList(ingredientList);
+    }
 }

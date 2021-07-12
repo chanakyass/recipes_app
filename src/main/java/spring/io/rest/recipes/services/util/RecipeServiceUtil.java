@@ -13,10 +13,7 @@ import spring.io.rest.recipes.services.dtos.entities.RecipeIngredientDto;
 import spring.io.rest.recipes.services.dtos.mappers.IngredientMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeIngredientMapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,18 +33,64 @@ public class RecipeServiceUtil {
     }
 
     public void saveUnavailableIngredients(RecipeDto recipeDto) {
-        List<Ingredient> unavailableIngredients = new ArrayList<>();
-        List<IngredientDto> unavailableIngredientDtos = new ArrayList<>();
+        List<Ingredient> unavailableIngredients;
+        List<IngredientDto> unavailableIngredientDtos;
 
-        recipeDto.getRecipeIngredients().stream().filter(recipeIngredientDto -> recipeIngredientDto.getIngredient().getId() == null
-                || ingredientRepository.findById(recipeIngredientDto.getIngredient().getId()).isEmpty())
-                .forEach(recipeIngredientDto -> {
-                    if(recipeIngredientDto.getIngredient().getId() != null) {
-                        recipeIngredientDto.getIngredient().setId(null);
-                    }
-                    unavailableIngredients.add(ingredientMapper.toIngredient(recipeIngredientDto.getIngredient()));
-                    unavailableIngredientDtos.add(recipeIngredientDto.getIngredient());
-                });
+//        recipeDto.getRecipeIngredients()
+//                .forEach(recipeIngredientDto -> {
+//                    IngredientDto ingredientDto = recipeIngredientDto.getIngredient();
+//                    if (ingredientDto.getId() == null) {
+//                        Optional<Ingredient> optionalIngredient = ingredientRepository.findByName(ingredientDto.getName());
+//                        optionalIngredient.ifPresent(ingredient -> ingredientDto.setId(ingredient.getId()));
+//                    }
+//                });
+
+        Set<IngredientDto> allNullIdIngredientsInInput = recipeDto.getRecipeIngredients().stream().map(RecipeIngredientDto::getIngredient).filter(ingredient ->
+                ingredient.getId() == null).collect(Collectors.toCollection(LinkedHashSet::new));
+
+        allNullIdIngredientsInInput.forEach(ingredientDto -> ingredientDto.setName(ingredientDto.getName().toUpperCase()));
+
+//        HashSet<String> ingredientsPresentInDB = new HashSet<>(ingredientRepository.findIngredientsByNameIn(allNullIdIngredientsInInput
+//                .stream().map(IngredientDto::getName).collect(Collectors.toList())).stream().map(Ingredient::getName).collect(Collectors.toList()));
+        Map<String, Ingredient> nameToIngredientMapOfAvailIngredients = ingredientRepository.findIngredientsByNameIn(
+                allNullIdIngredientsInInput.stream()
+                //Map ingredient to corresponding to its name
+                .map(IngredientDto::getName).collect(Collectors.toList())
+                ) // function call ends
+                .stream().collect(Collectors.toMap(Ingredient::getName, ingredient -> ingredient ));
+
+        //Set<String> ingredientsPresentInDB = nameToIngredientMapOfAvailIngredients.stream().map(Ingredient::getName).collect(Collectors.toCollection(HashSet::new));
+
+
+        allNullIdIngredientsInInput.forEach(ingredientDto -> {
+            String ingredientNameToSearch = ingredientDto.getName();
+            if(nameToIngredientMapOfAvailIngredients.containsKey(ingredientNameToSearch)) {
+                ingredientDto.setId(nameToIngredientMapOfAvailIngredients.get(ingredientNameToSearch).getId());
+                allNullIdIngredientsInInput.remove(ingredientDto);
+            }
+        });
+
+/*        allNullIdIngredientsInInput.forEach(ingredientDto -> {
+            if(ingredientsPresentInDB.contains(ingredientDto.getName())) {
+                ingredientsPresentInDB.find
+            }
+        });*/
+
+        //unavailableIngredientDtos = allNullIdIngredientsInInput.stream().filter(ingredientDto -> ingredientDto.getId() == null).collect(Collectors.toList());
+        unavailableIngredientDtos = new ArrayList<>(allNullIdIngredientsInInput);
+//        unavailableIngredientDtos = allNullIdIngredientsInInput.stream()
+//                .filter(ingredientDto -> !nameToIngredientMapOfAvailIngredients.containsKey(ingredientDto.getName())).collect(Collectors.toList());
+
+        unavailableIngredients = ingredientMapper.toIngredientList(unavailableIngredientDtos);
+
+//        recipeDto.getRecipeIngredients().stream().filter(recipeIngredientDto ->  recipeIngredientDto.getIngredient().getId() == null)
+//        .forEach(recipeIngredientDto -> {
+//            if(recipeIngredientDto.getIngredient().getId() != null) {
+//                recipeIngredientDto.getIngredient().setId(null);
+//            }
+//            unavailableIngredients.add(ingredientMapper.toIngredient(recipeIngredientDto.getIngredient()));
+//            unavailableIngredientDtos.add(recipeIngredientDto.getIngredient());
+//        });
 
         ingredientRepository.saveAll(unavailableIngredients);
 

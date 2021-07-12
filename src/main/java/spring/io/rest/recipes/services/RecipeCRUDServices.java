@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import spring.io.rest.recipes.exceptions.ApiOperationException;
 import spring.io.rest.recipes.models.entities.Recipe;
 import spring.io.rest.recipes.repositories.RecipeRepository;
+import spring.io.rest.recipes.security.SecurityUtil;
 import spring.io.rest.recipes.services.dtos.entities.RecipeDto;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeEditMapper;
 import spring.io.rest.recipes.services.dtos.mappers.RecipeMapper;
@@ -20,14 +21,16 @@ public class RecipeCRUDServices {
     private final RecipeMapper recipeMapper;
     private final RecipeEditMapper recipeEditMapper;
     private final RecipeServiceUtil recipeServiceUtil;
+    private final SecurityUtil securityUtil;
 
     @Autowired
     public RecipeCRUDServices(RecipeRepository recipeRepository, RecipeMapper recipeMapper, RecipeEditMapper recipeEditMapper,
-                              RecipeServiceUtil recipeServiceUtil) {
+                              RecipeServiceUtil recipeServiceUtil, SecurityUtil securityUtil) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.recipeEditMapper = recipeEditMapper;
         this.recipeServiceUtil = recipeServiceUtil;
+        this.securityUtil = securityUtil;
     }
 
     @Transactional
@@ -35,6 +38,7 @@ public class RecipeCRUDServices {
         Optional.ofNullable(recipeDto).orElseThrow(()-> new ApiOperationException("Wrong format"));
         recipeServiceUtil.saveUnavailableIngredients(recipeDto);
         Recipe recipe = recipeMapper.toRecipe(recipeDto);
+        recipe.setUser(securityUtil.getUserFromSubject());
         Recipe newRecipe = recipeRepository.save(recipe);
         return newRecipe.getId();
     }
